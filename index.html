@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ZHANGIR CRASH — тестовый игровой сайт</title>
+<title>NEON DASH — тестовый игровой сайт</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
@@ -156,6 +156,34 @@
     font-family: inherit;
   }
 
+  .level-select{
+    display:flex;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+  .lvl-btn{
+    flex:1;
+    padding: 8px 0;
+    font-size: 12px;
+    font-family: inherit;
+    color: var(--muted);
+    background: transparent;
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  .lvl-btn:hover{ color: var(--ink); border-color: var(--muted); }
+  .lvl-btn.active{
+    color: #05121A;
+    background: var(--cyan);
+    border-color: var(--cyan);
+    font-weight: 600;
+  }
+  .level-select.locked .lvl-btn{
+    opacity: 0.45;
+    pointer-events: none;
+  }
+
   /* ---------- STRIP ---------- */
   .strip{
     border-top: 1px solid var(--line);
@@ -271,6 +299,11 @@
       <span>СТАТУС: <span id="status">готов</span></span>
       <span class="score">ОЧКИ: <b id="score">0</b></span>
     </div>
+    <div class="level-select" id="levelSelect">
+      <button class="lvl-btn" data-level="easy">Лёгкий</button>
+      <button class="lvl-btn active" data-level="medium">Средний</button>
+      <button class="lvl-btn" data-level="hard">Сложный</button>
+    </div>
     <canvas id="game" width="480" height="360" tabindex="0"></canvas>
     <p class="game-hint">Управление: <kbd>←</kbd> <kbd>→</kbd> или касание/мышь. <kbd>Space</kbd> — рестарт.</p>
   </div>
@@ -291,8 +324,8 @@
   </div>
   <div class="feature">
     <div class="num pixel">02</div>
-    <h3>Растущая сложность</h3>
-    <p>Чем дольше держишься — тем быстрее падают блоки. Игра сама подстраивает темп под твой результат.</p>
+    <h3>3 уровня сложности</h3>
+    <p>Лёгкий, средний и сложный — разная стартовая скорость и частота блоков. Внутри раунда темп тоже растёт, чем дольше держишься.</p>
   </div>
   <div class="feature">
     <div class="num pixel">03</div>
@@ -327,15 +360,32 @@
   const W = canvas.width, H = canvas.height;
   let player, blocks, score, best, speed, running, keys, raf;
 
+  const LEVELS = {
+    easy:   { startSpeed: 1.8, accel: 0.0009, baseSpawn: 50, minSpawn: 26, label: 'Лёгкий' },
+    medium: { startSpeed: 2.4, accel: 0.0015, baseSpawn: 42, minSpawn: 18, label: 'Средний' },
+    hard:   { startSpeed: 3.4, accel: 0.0026, baseSpawn: 32, minSpawn: 11, label: 'Сложный' }
+  };
+  let currentLevel = 'medium';
+  const levelSelect = document.getElementById('levelSelect');
+
+  levelSelect.addEventListener('click', e => {
+    const btn = e.target.closest('.lvl-btn');
+    if(!btn) return;
+    currentLevel = btn.dataset.level;
+    [...levelSelect.children].forEach(b => b.classList.toggle('active', b === btn));
+    if(!running){ resetState(); draw(); }
+  });
+
   function resetState(){
+    const lvl = LEVELS[currentLevel];
     player = { x: W/2 - 16, y: H - 34, w: 32, h: 18, speed: 6 };
     blocks = [];
     score = 0;
-    speed = 2.4;
+    speed = lvl.startSpeed;
     running = false;
     keys = { left:false, right:false };
     scoreEl.textContent = '0';
-    statusEl.textContent = 'готов';
+    statusEl.textContent = 'готов · ' + lvl.label;
   }
   resetState();
   best = 0;
@@ -354,8 +404,10 @@
     if(keys.right) player.x += player.speed;
     player.x = Math.max(0, Math.min(W - player.w, player.x));
 
+    const lvl = LEVELS[currentLevel];
+
     spawnTimer++;
-    const spawnRate = Math.max(18, 42 - Math.floor(score/5));
+    const spawnRate = Math.max(lvl.minSpawn, lvl.baseSpawn - Math.floor(score/5));
     if(spawnTimer > spawnRate){ spawnBlock(); spawnTimer = 0; }
 
     blocks.forEach(b => b.y += speed);
@@ -370,7 +422,7 @@
     }
 
     score += 0.06;
-    speed += 0.0015;
+    speed += lvl.accel;
     scoreEl.textContent = Math.floor(score);
 
     draw();
@@ -400,6 +452,7 @@
 
   function gameOver(){
     running = false;
+    levelSelect.classList.remove('locked');
     cancelAnimationFrame(raf);
     statusEl.textContent = 'проигрыш — space чтобы заново';
     const finalScore = Math.floor(score);
@@ -423,7 +476,8 @@
   function startGame(){
     resetState();
     running = true;
-    statusEl.textContent = 'в игре';
+    statusEl.textContent = 'в игре · ' + LEVELS[currentLevel].label;
+    levelSelect.classList.add('locked');
     canvas.focus();
     raf = requestAnimationFrame(update);
   }
