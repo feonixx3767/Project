@@ -13,6 +13,7 @@
     --violet: #7C3AED;
     --cyan: #22D3EE;
     --pink: #F43F97;
+    --gold: #FFD166;
     --ink: #F1EEFB;
     --muted: #8A8AA3;
     --line: rgba(241,238,251,0.09);
@@ -45,6 +46,8 @@
     align-items:center;
     padding: 28px 6vw;
     border-bottom: 1px solid var(--line);
+    flex-wrap: wrap;
+    gap: 14px;
   }
   nav .logo{
     font-size: 13px;
@@ -59,6 +62,25 @@
     color: var(--muted);
   }
   nav ul a:hover{ color: var(--ink); }
+  nav .nav-right{ display:flex; align-items:center; gap: 16px; }
+  .wallet-pill{
+    display:flex;
+    align-items:center;
+    gap: 7px;
+    border: 1px solid var(--line);
+    background: rgba(255,209,102,0.08);
+    padding: 8px 14px;
+    border-radius: 20px;
+    font-size: 13px;
+    color: var(--gold);
+    font-weight: 600;
+  }
+  .wallet-pill .coin-dot{
+    width: 10px; height: 10px; border-radius: 50%;
+    background: var(--gold);
+    box-shadow: 0 0 8px var(--gold);
+    display:inline-block;
+  }
   nav .cta{
     border: 1px solid var(--violet);
     padding: 9px 18px;
@@ -74,7 +96,7 @@
     display:grid;
     grid-template-columns: 1.05fr 1fr;
     gap: 4vw;
-    align-items:center;
+    align-items:start;
   }
 
   .hero h1{
@@ -99,7 +121,7 @@
     margin-bottom: 30px;
   }
 
-  .hero-actions{ display:flex; gap: 14px; flex-wrap: wrap; }
+  .hero-actions{ display:flex; gap: 14px; flex-wrap: wrap; margin-bottom: 34px;}
   .btn{
     display:inline-block;
     padding: 13px 22px;
@@ -114,7 +136,41 @@
   .btn-ghost{ border: 1px solid var(--line); color: var(--ink); background: transparent; }
   .btn-ghost:hover{ border-color: var(--muted); }
 
+  .hero-note{
+    border-left: 2px solid var(--violet);
+    padding-left: 16px;
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.7;
+    max-width: 42ch;
+  }
+  .hero-note b{ color: var(--ink); }
+
   /* game panel */
+  .game-tabs{
+    display:flex;
+    gap: 8px;
+    margin-bottom: 14px;
+  }
+  .tab-btn{
+    flex:1;
+    padding: 11px 0;
+    font-size: 13px;
+    font-weight: 600;
+    font-family: inherit;
+    color: var(--muted);
+    background: var(--bg-panel);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    cursor: pointer;
+  }
+  .tab-btn:hover{ color: var(--ink); }
+  .tab-btn.active{
+    color: var(--ink);
+    border-color: var(--cyan);
+    background: rgba(34,211,238,0.08);
+  }
+
   .game-wrap{
     background: var(--bg-panel);
     border: 1px solid var(--line);
@@ -122,6 +178,9 @@
     padding: 18px;
     position: relative;
   }
+  .game-panel{ display:none; }
+  .game-panel.active{ display:block; }
+
   .game-hud{
     display:flex;
     justify-content:space-between;
@@ -129,11 +188,15 @@
     margin-bottom: 12px;
     font-size: 12px;
     color: var(--muted);
+    flex-wrap: wrap;
+    gap: 6px;
   }
   .game-hud .score{ color: var(--ink); }
   .game-hud .score b{ color: var(--pink); font-size: 15px; }
+  .game-hud .coins{ color: var(--gold); }
+  .game-hud .coins b{ font-size: 14px; }
 
-  #game{
+  canvas.stage{
     width: 100%;
     aspect-ratio: 4/3;
     display:block;
@@ -194,6 +257,7 @@
     overflow:hidden;
     color: var(--muted);
     font-size: 13px;
+    flex-wrap: wrap;
   }
   .strip span{ white-space:nowrap; }
   .strip b{ color: var(--ink); }
@@ -202,7 +266,7 @@
   .features{
     padding: 6vw;
     display:grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     gap: 1px;
     background: var(--line);
     border: 1px solid var(--line);
@@ -213,20 +277,83 @@
   }
   .feature{
     background: var(--bg-panel);
-    padding: 34px 28px;
+    padding: 34px 24px;
   }
   .feature .num{
     font-size: 11px;
     color: var(--pink);
     margin-bottom: 14px;
   }
-  .feature h3{ font-size: 18px; margin-bottom: 10px; }
-  .feature p{ color: var(--muted); font-size: 14px; line-height: 1.6; }
+  .feature h3{ font-size: 17px; margin-bottom: 10px; }
+  .feature p{ color: var(--muted); font-size: 13.5px; line-height: 1.6; }
+
+  /* ---------- SHOP ---------- */
+  .shop{
+    padding: 6vw;
+    max-width: 900px;
+  }
+  .shop-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-end;
+    margin-bottom: 26px;
+    flex-wrap: wrap;
+    gap: 14px;
+  }
+  .shop-head h2{ font-size: 22px; margin-bottom: 6px; }
+  .shop-head p{ color: var(--muted); font-size: 14px; }
+  .shop-grid{
+    display:grid;
+    grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+    gap: 14px;
+  }
+  .skin-card{
+    background: var(--bg-panel);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 18px;
+    display:flex;
+    flex-direction:column;
+    gap: 12px;
+  }
+  .skin-card.equipped{ border-color: var(--cyan); }
+  .skin-swatch{
+    width: 100%;
+    height: 64px;
+    border-radius: 6px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .skin-swatch .chip{
+    width: 34px; height: 34px; border-radius: 6px;
+  }
+  .skin-card h4{ font-size: 14px; }
+  .skin-card .price{ font-size: 12px; color: var(--gold); }
+  .skin-card .price.free{ color: var(--muted); }
+  .skin-btn{
+    margin-top: auto;
+    padding: 9px 0;
+    border-radius: 4px;
+    border: 1px solid var(--line);
+    background: transparent;
+    color: var(--ink);
+    font-family: inherit;
+    font-size: 12px;
+    cursor: pointer;
+  }
+  .skin-btn:hover{ border-color: var(--muted); }
+  .skin-btn.buy{ border-color: var(--gold); color: var(--gold); }
+  .skin-btn.buy:hover{ background: rgba(255,209,102,0.1); }
+  .skin-btn.equip{ border-color: var(--cyan); color: var(--cyan); }
+  .skin-btn.equip:hover{ background: rgba(34,211,238,0.1); }
+  .skin-btn.current{ background: var(--cyan); color: #05121A; border-color: var(--cyan); cursor: default; font-weight:600; }
+  .skin-btn:disabled{ opacity: 0.4; cursor: not-allowed; }
 
   /* ---------- LEADERBOARD ---------- */
   .board{
     padding: 6vw;
-    max-width: 620px;
+    max-width: 680px;
   }
   .board h2{ font-size: 22px; margin-bottom: 6px; }
   .board p{ color: var(--muted); font-size: 14px; margin-bottom: 26px; }
@@ -256,6 +383,8 @@
     font-size: 13px;
     border-top: 1px solid var(--line);
     margin-top: 40px;
+    flex-wrap: wrap;
+    gap: 10px;
   }
 
   @media (max-width: 860px){
@@ -277,41 +406,74 @@
 <nav>
   <div class="logo pixel"><span>◆</span> NEON DASH</div>
   <ul>
-    <li><a href="#play">Игра</a></li>
+    <li><a href="#play">Игры</a></li>
+    <li><a href="#shop">Магазин</a></li>
     <li><a href="#features">Об игре</a></li>
     <li><a href="#board">Рекорды</a></li>
   </ul>
-  <a class="cta" href="#play">Играть</a>
+  <div class="nav-right">
+    <div class="wallet-pill"><span class="coin-dot"></span> <span class="wallet-count">0</span></div>
+    <a class="cta" href="#play">Играть</a>
+  </div>
 </nav>
 
 <section class="hero" id="play">
   <div>
     <h1>Уклоняйся от блоков.<br>Держи <em>ритм</em>. Побей рекорд.</h1>
-    <p class="lead">NEON DASH — мини-аркада прямо в браузере. Управляй кубом, уворачивайся от падающих преград, набирай очки. Никаких установок — просто открой и играй.</p>
+    <p class="lead">NEON DASH — мини-аркада прямо в браузере. Управляй кубом, уворачивайся от падающих преград, собирай монеты и покупай скины. Плюс вторая игра — NEON SNAKE. Никаких установок — просто открой и играй.</p>
     <div class="hero-actions">
-      <button class="btn btn-primary" onclick="startGame()">Начать игру</button>
-      <a class="btn btn-ghost" href="#features">Как это работает</a>
+      <button class="btn btn-primary" onclick="startActiveGame()">Начать игру</button>
+      <a class="btn btn-ghost" href="#shop">Открыть магазин</a>
+    </div>
+    <div class="hero-note">
+      <b>Как копить монеты:</b> в NEON DASH лови золотые шарики, падающие вместе с блоками. В NEON SNAKE ищи золотые орбы среди обычных. Монеты общие для обеих игр — трать их в магазине скинов.
     </div>
   </div>
 
   <div class="game-wrap">
-    <div class="game-hud">
-      <span>СТАТУС: <span id="status">готов</span></span>
-      <span class="score">ОЧКИ: <b id="score">0</b></span>
+    <div class="game-tabs">
+      <button class="tab-btn active" data-game="dash">NEON DASH</button>
+      <button class="tab-btn" data-game="snake">NEON SNAKE</button>
     </div>
-    <div class="level-select" id="levelSelect">
-      <button class="lvl-btn" data-level="easy">Лёгкий</button>
-      <button class="lvl-btn active" data-level="medium">Средний</button>
-      <button class="lvl-btn" data-level="hard">Сложный</button>
+
+    <!-- DASH PANEL -->
+    <div class="game-panel active" id="panel-dash">
+      <div class="game-hud">
+        <span>СТАТУС: <span id="status-dash">готов</span></span>
+        <span class="coins">🪙 <b id="runCoins-dash">0</b></span>
+        <span class="score">ОЧКИ: <b id="score-dash">0</b></span>
+      </div>
+      <div class="level-select" id="levelSelect-dash">
+        <button class="lvl-btn" data-level="easy">Лёгкий</button>
+        <button class="lvl-btn active" data-level="medium">Средний</button>
+        <button class="lvl-btn" data-level="hard">Сложный</button>
+      </div>
+      <canvas class="stage" id="game-dash" width="480" height="360" tabindex="0"></canvas>
+      <p class="game-hint">Управление: <kbd>←</kbd> <kbd>→</kbd> или касание/мышь. <kbd>Space</kbd> — рестарт. Золотые шарики — монеты.</p>
     </div>
-    <canvas id="game" width="480" height="360" tabindex="0"></canvas>
-    <p class="game-hint">Управление: <kbd>←</kbd> <kbd>→</kbd> или касание/мышь. <kbd>Space</kbd> — рестарт.</p>
+
+    <!-- SNAKE PANEL -->
+    <div class="game-panel" id="panel-snake">
+      <div class="game-hud">
+        <span>СТАТУС: <span id="status-snake">готов</span></span>
+        <span class="coins">🪙 <b id="runCoins-snake">0</b></span>
+        <span class="score">ОЧКИ: <b id="score-snake">0</b></span>
+      </div>
+      <div class="level-select" id="levelSelect-snake">
+        <button class="lvl-btn" data-level="easy">Лёгкий</button>
+        <button class="lvl-btn active" data-level="medium">Средний</button>
+        <button class="lvl-btn" data-level="hard">Сложный</button>
+      </div>
+      <canvas class="stage" id="game-snake" width="480" height="360" tabindex="0"></canvas>
+      <p class="game-hint">Управление: <kbd>←</kbd><kbd>→</kbd><kbd>↑</kbd><kbd>↓</kbd> или свайп. <kbd>Space</kbd> — рестарт. Золотые орбы — монеты.</p>
+    </div>
   </div>
 </section>
 
 <div class="strip">
   <span><b>0</b> установок нужно</span>
   <span><b>60 fps</b> на canvas</span>
+  <span><b>2</b> игры в одном файле</span>
   <span><b>100%</b> открытый код — бери и меняй</span>
   <span>Сделано как тестовый шаблон для GitHub Pages</span>
 </div>
@@ -320,27 +482,43 @@
   <div class="feature">
     <div class="num pixel">01</div>
     <h3>Один файл</h3>
-    <p>Вся игра, стили и логика — в одном index.html. Загрузи в репозиторий и включи GitHub Pages, сайт готов.</p>
+    <p>Обе игры, магазин и стили — в одном index.html. Загрузи в репозиторий и включи GitHub Pages, сайт готов.</p>
   </div>
   <div class="feature">
     <div class="num pixel">02</div>
-    <h3>3 уровня сложности</h3>
-    <p>Лёгкий, средний и сложный — разная стартовая скорость и частота блоков. Внутри раунда темп тоже растёт, чем дольше держишься.</p>
+    <h3>Возрастающая сложность</h3>
+    <p>3 уровня в каждой игре плюс живая эскалация: чем дольше держишься, тем чаще преграды и выше скорость. На сложном уровне блоки ещё и двигаются по горизонтали.</p>
   </div>
   <div class="feature">
     <div class="num pixel">03</div>
+    <h3>Монеты и скины</h3>
+    <p>Лови монеты в обеих играх и открывай магазин: пять скинов игрока, от базового голубого до анимированного Prism.</p>
+  </div>
+  <div class="feature">
+    <div class="num pixel">04</div>
     <h3>Легко переделать</h3>
-    <p>Поменяй цвета в блоке :root, замени текст или логику игры в скрипте внизу файла — всё читаемо и без сборки.</p>
+    <p>Поменяй цвета в блоке :root, добавь свой скин в массив SKINS или измени логику любой из игр — всё читаемо и без сборки.</p>
   </div>
 </section>
 
+<section class="shop" id="shop">
+  <div class="shop-head">
+    <div>
+      <h2>Магазин скинов</h2>
+      <p>Монеты общие для NEON DASH и NEON SNAKE. Выбранный скин применяется в обеих играх сразу.</p>
+    </div>
+    <div class="wallet-pill"><span class="coin-dot"></span> <span class="wallet-count">0</span></div>
+  </div>
+  <div class="shop-grid" id="shopGrid"></div>
+</section>
+
 <section class="board" id="board">
-  <h2>Локальный рекорд</h2>
-  <p>Сохраняется в этом браузере, пока ты не сыграешь ещё раз.</p>
+  <h2>Локальные рекорды</h2>
+  <p>Сохраняются в этом браузере, пока ты не перезагрузишь страницу.</p>
   <table>
-    <tr><th>#</th><th>Результат</th><th>Статус</th></tr>
-    <tr><td class="rank">1</td><td id="bestScore">0</td><td>лучший в этой сессии</td></tr>
-    <tr><td class="rank">2</td><td id="lastScore">—</td><td>прошлая попытка</td></tr>
+    <tr><th>Игра</th><th>Лучший результат</th><th>Прошлая попытка</th></tr>
+    <tr><td>NEON DASH</td><td id="bestScore-dash">0</td><td id="lastScore-dash">—</td></tr>
+    <tr><td>NEON SNAKE</td><td id="bestScore-snake">0</td><td id="lastScore-snake">—</td></tr>
   </table>
 </section>
 
@@ -350,23 +528,140 @@
 </footer>
 
 <script>
-  const canvas = document.getElementById('game');
+/* =========================================================
+   ОБЩЕЕ СОСТОЯНИЕ: КОШЕЛЁК И СКИНЫ (общие для обеих игр)
+   ========================================================= */
+let wallet = 0;
+let ownedSkins = new Set(['cyan']);
+let equippedSkin = 'cyan';
+let activeGame = 'dash';
+
+const SKINS = [
+  { id:'cyan',   name:'Cyan Core',    price:0,   main:'#22D3EE', glow:'#22D3EE' },
+  { id:'pink',   name:'Pink Pulse',   price:40,  main:'#F43F97', glow:'#F43F97' },
+  { id:'violet', name:'Violet Flux',  price:80,  main:'#7C3AED', glow:'#B794F6' },
+  { id:'gold',   name:'Gold Rush',    price:150, main:'#FFD166', glow:'#FFD166' },
+  { id:'prism',  name:'Prism',        price:250, main:'prism',   glow:'prism' },
+];
+
+function currentSkinColor(t){
+  const skin = SKINS.find(s => s.id === equippedSkin) || SKINS[0];
+  if(skin.main === 'prism'){
+    const hue = (t * 70) % 360;
+    return `hsl(${hue}, 90%, 60%)`;
+  }
+  return skin.main;
+}
+
+function addCoins(n){
+  wallet += n;
+  document.querySelectorAll('.wallet-count').forEach(el => el.textContent = wallet);
+}
+
+function renderShop(){
+  const grid = document.getElementById('shopGrid');
+  grid.innerHTML = '';
+  SKINS.forEach(skin => {
+    const owned = ownedSkins.has(skin.id);
+    const equipped = equippedSkin === skin.id;
+    const card = document.createElement('div');
+    card.className = 'skin-card' + (equipped ? ' equipped' : '');
+
+    const swatch = document.createElement('div');
+    swatch.className = 'skin-swatch';
+    swatch.style.background = 'radial-gradient(circle, rgba(255,255,255,0.06), transparent 70%)';
+    const chip = document.createElement('div');
+    chip.className = 'chip';
+    if(skin.main === 'prism'){
+      chip.style.background = 'linear-gradient(90deg,#F43F97,#7C3AED,#22D3EE,#FFD166,#F43F97)';
+    } else {
+      chip.style.background = skin.main;
+      chip.style.boxShadow = `0 0 16px ${skin.glow}`;
+    }
+    swatch.appendChild(chip);
+
+    const title = document.createElement('h4');
+    title.textContent = skin.name;
+
+    const price = document.createElement('div');
+    price.className = 'price' + (skin.price === 0 ? ' free' : '');
+    price.textContent = skin.price === 0 ? 'бесплатно' : `🪙 ${skin.price}`;
+
+    const btn = document.createElement('button');
+    if(equipped){
+      btn.className = 'skin-btn current';
+      btn.textContent = 'Выбран';
+      btn.disabled = true;
+    } else if(owned){
+      btn.className = 'skin-btn equip';
+      btn.textContent = 'Выбрать';
+      btn.onclick = () => { equippedSkin = skin.id; renderShop(); };
+    } else {
+      btn.className = 'skin-btn buy';
+      btn.textContent = 'Купить';
+      btn.disabled = wallet < skin.price;
+      btn.onclick = () => {
+        if(wallet >= skin.price){
+          wallet -= skin.price;
+          document.querySelectorAll('.wallet-count').forEach(el => el.textContent = wallet);
+          ownedSkins.add(skin.id);
+          equippedSkin = skin.id;
+          renderShop();
+        }
+      };
+    }
+
+    card.appendChild(swatch);
+    card.appendChild(title);
+    card.appendChild(price);
+    card.appendChild(btn);
+    grid.appendChild(card);
+  });
+}
+renderShop();
+
+/* =========================================================
+   ПЕРЕКЛЮЧЕНИЕ ВКЛАДОК ИГР
+   ========================================================= */
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    activeGame = btn.dataset.game;
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b === btn));
+    document.getElementById('panel-dash').classList.toggle('active', activeGame === 'dash');
+    document.getElementById('panel-snake').classList.toggle('active', activeGame === 'snake');
+    if(activeGame === 'dash') document.getElementById('game-dash').focus();
+    else document.getElementById('game-snake').focus();
+  });
+});
+
+function startActiveGame(){
+  if(activeGame === 'dash') startDash();
+  else startSnake();
+}
+
+/* =========================================================
+   ИГРА 1: NEON DASH
+   ========================================================= */
+(function(){
+  const canvas = document.getElementById('game-dash');
   const ctx = canvas.getContext('2d');
-  const scoreEl = document.getElementById('score');
-  const statusEl = document.getElementById('status');
-  const bestEl = document.getElementById('bestScore');
-  const lastEl = document.getElementById('lastScore');
+  const scoreEl = document.getElementById('score-dash');
+  const statusEl = document.getElementById('status-dash');
+  const runCoinsEl = document.getElementById('runCoins-dash');
+  const bestEl = document.getElementById('bestScore-dash');
+  const lastEl = document.getElementById('lastScore-dash');
+  const levelSelect = document.getElementById('levelSelect-dash');
 
   const W = canvas.width, H = canvas.height;
-  let player, blocks, score, best, speed, running, keys, raf;
+  let player, blocks, coins, score, best = 0, speed, running, keys, raf, spawnTimer, runCoins;
 
+  // Сложность увеличена: выше стартовая скорость, быстрее разгон, чаще преграды
   const LEVELS = {
-    easy:   { startSpeed: 1.8, accel: 0.0009, baseSpawn: 50, minSpawn: 26, label: 'Лёгкий' },
-    medium: { startSpeed: 2.4, accel: 0.0015, baseSpawn: 42, minSpawn: 18, label: 'Средний' },
-    hard:   { startSpeed: 3.4, accel: 0.0026, baseSpawn: 32, minSpawn: 11, label: 'Сложный' }
+    easy:   { startSpeed: 2.0, accel: 0.0012, baseSpawn: 46, minSpawn: 22, label: 'Лёгкий',   moving: false },
+    medium: { startSpeed: 2.8, accel: 0.0020, baseSpawn: 38, minSpawn: 15, label: 'Средний',  moving: false },
+    hard:   { startSpeed: 4.0, accel: 0.0035, baseSpawn: 28, minSpawn: 9,  label: 'Сложный',  moving: true  }
   };
   let currentLevel = 'medium';
-  const levelSelect = document.getElementById('levelSelect');
 
   levelSelect.addEventListener('click', e => {
     const btn = e.target.closest('.lvl-btn');
@@ -378,24 +673,37 @@
 
   function resetState(){
     const lvl = LEVELS[currentLevel];
-    player = { x: W/2 - 16, y: H - 34, w: 32, h: 18, speed: 6 };
+    player = { x: W/2 - 16, y: H - 34, w: 32, h: 18, speed: 6.2 };
     blocks = [];
+    coins = [];
     score = 0;
+    runCoins = 0;
     speed = lvl.startSpeed;
     running = false;
     keys = { left:false, right:false };
+    spawnTimer = 0;
     scoreEl.textContent = '0';
+    runCoinsEl.textContent = '0';
     statusEl.textContent = 'готов · ' + lvl.label;
   }
   resetState();
-  best = 0;
 
-  function spawnBlock(){
-    const w = 26 + Math.random()*40;
-    blocks.push({ x: Math.random()*(W-w), y: -20, w, h: 18 });
+  function spawnBlock(chaos){
+    const lvl = LEVELS[currentLevel];
+    const w = 24 + Math.random()*38;
+    const moving = lvl.moving || chaos;
+    blocks.push({
+      x: Math.random()*(W-w), y: -20, w, h: 18,
+      vx: moving ? (Math.random() < 0.5 ? -1 : 1) * (1 + Math.random()*1.6) : 0
+    });
   }
 
-  let spawnTimer = 0;
+  function spawnCoin(){
+    const r = 8;
+    coins.push({ x: r + Math.random()*(W-2*r), y: -20, r });
+  }
+
+  let coinTimer = 0;
 
   function update(){
     if(!running) return;
@@ -405,19 +713,53 @@
     player.x = Math.max(0, Math.min(W - player.w, player.x));
 
     const lvl = LEVELS[currentLevel];
+    const chaos = score > 55; // после 55 очков preграды начинают вилять на любом уровне
 
     spawnTimer++;
-    const spawnRate = Math.max(lvl.minSpawn, lvl.baseSpawn - Math.floor(score/5));
-    if(spawnTimer > spawnRate){ spawnBlock(); spawnTimer = 0; }
+    let spawnRate = Math.max(lvl.minSpawn, lvl.baseSpawn - Math.floor(score/5));
+    if(score > 30) spawnRate = Math.max(lvl.minSpawn - 2, spawnRate - 4); // бонус-хаос после 30 очков
+    if(spawnTimer > spawnRate){
+      spawnBlock(chaos);
+      if(chaos && Math.random() < 0.35) spawnBlock(chaos); // иногда двойной спавн
+      spawnTimer = 0;
+    }
 
-    blocks.forEach(b => b.y += speed);
+    coinTimer++;
+    if(coinTimer > 95 + Math.random()*60){
+      spawnCoin();
+      coinTimer = 0;
+    }
+
+    blocks.forEach(b => {
+      b.y += speed;
+      if(b.vx){
+        b.x += b.vx;
+        if(b.x < 0 || b.x + b.w > W) b.vx *= -1;
+      }
+    });
     blocks = blocks.filter(b => b.y < H + 20);
+
+    coins.forEach(c => c.y += speed * 0.85);
+    coins = coins.filter(c => c.y < H + 20);
 
     for(const b of blocks){
       if(player.x < b.x + b.w && player.x + player.w > b.x &&
          player.y < b.y + b.h && player.y + player.h > b.y){
         gameOver();
         return;
+      }
+    }
+
+    for(let i = coins.length - 1; i >= 0; i--){
+      const c = coins[i];
+      const closestX = Math.max(player.x, Math.min(c.x, player.x + player.w));
+      const closestY = Math.max(player.y, Math.min(c.y, player.y + player.h));
+      const dx = c.x - closestX, dy = c.y - closestY;
+      if(dx*dx + dy*dy < c.r*c.r){
+        coins.splice(i, 1);
+        runCoins += 1;
+        runCoinsEl.textContent = runCoins;
+        addCoins(1);
       }
     }
 
@@ -432,19 +774,25 @@
   function draw(){
     ctx.clearRect(0,0,W,H);
 
-    // grid backdrop
     ctx.strokeStyle = 'rgba(255,255,255,0.04)';
     for(let x=0;x<W;x+=24){ ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,H); ctx.stroke(); }
 
-    // blocks
     ctx.fillStyle = '#F43F97';
-    blocks.forEach(b => {
-      ctx.fillRect(b.x, b.y, b.w, b.h);
-    });
+    blocks.forEach(b => ctx.fillRect(b.x, b.y, b.w, b.h));
 
-    // player
-    ctx.fillStyle = '#22D3EE';
-    ctx.shadowColor = '#22D3EE';
+    ctx.fillStyle = '#FFD166';
+    ctx.shadowColor = '#FFD166';
+    ctx.shadowBlur = 10;
+    coins.forEach(c => {
+      ctx.beginPath();
+      ctx.arc(c.x, c.y, c.r, 0, Math.PI*2);
+      ctx.fill();
+    });
+    ctx.shadowBlur = 0;
+
+    const col = currentSkinColor(performance.now()/1000);
+    ctx.fillStyle = col;
+    ctx.shadowColor = col;
     ctx.shadowBlur = 14;
     ctx.fillRect(player.x, player.y, player.w, player.h);
     ctx.shadowBlur = 0;
@@ -467,35 +815,25 @@
     ctx.fillStyle = '#F1EEFB';
     ctx.font = '16px "Space Grotesk", sans-serif';
     ctx.textAlign = 'center';
-    ctx.fillText('Результат: ' + finalScore, W/2, H/2 - 6);
+    ctx.fillText('Результат: ' + finalScore + '  ·  🪙 ' + runCoins, W/2, H/2 - 6);
     ctx.font = '12px "Space Grotesk", sans-serif';
     ctx.fillStyle = '#8A8AA3';
     ctx.fillText('нажми Space или кликни, чтобы начать заново', W/2, H/2 + 18);
   }
 
-  function startGame(){
+  window.startDash = function(){
     resetState();
     running = true;
     statusEl.textContent = 'в игре · ' + LEVELS[currentLevel].label;
     levelSelect.classList.add('locked');
     canvas.focus();
     raf = requestAnimationFrame(update);
-  }
+  };
 
-  document.addEventListener('keydown', e => {
-    if(e.key === 'ArrowLeft') keys.left = true;
-    if(e.key === 'ArrowRight') keys.right = true;
-    if(e.key === ' '){ e.preventDefault(); startGame(); }
-  });
-  document.addEventListener('keyup', e => {
-    if(e.key === 'ArrowLeft') keys.left = false;
-    if(e.key === 'ArrowRight') keys.right = false;
-  });
-
-  canvas.addEventListener('click', () => { if(!running) startGame(); });
+  canvas.addEventListener('click', () => { if(activeGame === 'dash' && !running) startDash(); });
 
   canvas.addEventListener('mousemove', e => {
-    if(!running) return;
+    if(activeGame !== 'dash' || !running) return;
     const rect = canvas.getBoundingClientRect();
     const scale = W / rect.width;
     const x = (e.clientX - rect.left) * scale;
@@ -503,7 +841,7 @@
   });
 
   canvas.addEventListener('touchmove', e => {
-    if(!running) return;
+    if(activeGame !== 'dash' || !running) return;
     e.preventDefault();
     const rect = canvas.getBoundingClientRect();
     const scale = W / rect.width;
@@ -511,7 +849,213 @@
     player.x = Math.max(0, Math.min(W - player.w, x - player.w/2));
   }, { passive:false });
 
+  window.dashKeyDown = function(e){
+    if(e.key === 'ArrowLeft') keys.left = true;
+    if(e.key === 'ArrowRight') keys.right = true;
+  };
+  window.dashKeyUp = function(e){
+    if(e.key === 'ArrowLeft') keys.left = false;
+    if(e.key === 'ArrowRight') keys.right = false;
+  };
+
   draw();
+})();
+
+/* =========================================================
+   ИГРА 2: NEON SNAKE
+   ========================================================= */
+(function(){
+  const canvas = document.getElementById('game-snake');
+  const ctx = canvas.getContext('2d');
+  const scoreEl = document.getElementById('score-snake');
+  const statusEl = document.getElementById('status-snake');
+  const runCoinsEl = document.getElementById('runCoins-snake');
+  const bestEl = document.getElementById('bestScore-snake');
+  const lastEl = document.getElementById('lastScore-snake');
+  const levelSelect = document.getElementById('levelSelect-snake');
+
+  const W = canvas.width, H = canvas.height;
+  const CELL = 24;
+  const COLS = W / CELL, ROWS = H / CELL;
+
+  const LEVELS = {
+    easy:   { baseDelay: 150, minDelay: 80,  step: 3, label: 'Лёгкий'  },
+    medium: { baseDelay: 115, minDelay: 55,  step: 4, label: 'Средний' },
+    hard:   { baseDelay: 85,  minDelay: 38,  step: 5, label: 'Сложный' }
+  };
+  let currentLevel = 'medium';
+
+  let snake, dir, nextDir, food, score, best = 0, running, timer, delay, runCoins;
+
+  levelSelect.addEventListener('click', e => {
+    const btn = e.target.closest('.lvl-btn');
+    if(!btn) return;
+    currentLevel = btn.dataset.level;
+    [...levelSelect.children].forEach(b => b.classList.toggle('active', b === btn));
+    if(!running){ resetState(); draw(); }
+  });
+
+  function resetState(){
+    const lvl = LEVELS[currentLevel];
+    snake = [{x:8,y:7},{x:7,y:7},{x:6,y:7}];
+    dir = {x:1,y:0};
+    nextDir = {x:1,y:0};
+    score = 0;
+    runCoins = 0;
+    running = false;
+    delay = lvl.baseDelay;
+    placeFood();
+    scoreEl.textContent = '0';
+    runCoinsEl.textContent = '0';
+    statusEl.textContent = 'готов · ' + lvl.label;
+  }
+
+  function placeFood(){
+    const gold = Math.random() < 0.22;
+    let pos;
+    do {
+      pos = { x: Math.floor(Math.random()*COLS), y: Math.floor(Math.random()*ROWS), gold };
+    } while(snake.some(s => s.x === pos.x && s.y === pos.y));
+    food = pos;
+  }
+
+  function loop(){
+    if(!running) return;
+    dir = nextDir;
+    const head = { x: snake[0].x + dir.x, y: snake[0].y + dir.y };
+
+    if(head.x < 0 || head.x >= COLS || head.y < 0 || head.y >= ROWS ||
+       snake.some(s => s.x === head.x && s.y === head.y)){
+      gameOver();
+      return;
+    }
+
+    snake.unshift(head);
+
+    if(head.x === food.x && head.y === food.y){
+      score += food.gold ? 3 : 1;
+      scoreEl.textContent = score;
+      if(food.gold){
+        runCoins += 3;
+        runCoinsEl.textContent = runCoins;
+        addCoins(3);
+      }
+      const lvl = LEVELS[currentLevel];
+      delay = Math.max(lvl.minDelay, delay - lvl.step);
+      placeFood();
+    } else {
+      snake.pop();
+    }
+
+    draw();
+    timer = setTimeout(loop, delay);
+  }
+
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+
+    ctx.strokeStyle = 'rgba(255,255,255,0.04)';
+    for(let x=0;x<W;x+=CELL){ ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,H); ctx.stroke(); }
+    for(let y=0;y<H;y+=CELL){ ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(W,y); ctx.stroke(); }
+
+    // еда
+    ctx.beginPath();
+    const fx = food.x*CELL + CELL/2, fy = food.y*CELL + CELL/2;
+    ctx.fillStyle = food.gold ? '#FFD166' : '#F43F97';
+    ctx.shadowColor = ctx.fillStyle;
+    ctx.shadowBlur = 12;
+    ctx.arc(fx, fy, CELL/2 - 4, 0, Math.PI*2);
+    ctx.fill();
+    ctx.shadowBlur = 0;
+
+    // змейка
+    const t = performance.now()/1000;
+    snake.forEach((s, i) => {
+      const col = i === 0 ? currentSkinColor(t) : 'rgba(241,238,251,0.28)';
+      ctx.fillStyle = col;
+      if(i === 0){
+        ctx.shadowColor = col;
+        ctx.shadowBlur = 12;
+      }
+      ctx.fillRect(s.x*CELL + 2, s.y*CELL + 2, CELL-4, CELL-4);
+      ctx.shadowBlur = 0;
+    });
+  }
+
+  function gameOver(){
+    running = false;
+    levelSelect.classList.remove('locked');
+    clearTimeout(timer);
+    statusEl.textContent = 'проигрыш — space чтобы заново';
+    lastEl.textContent = score;
+    if(score > best){
+      best = score;
+      bestEl.textContent = best;
+    }
+    draw();
+    ctx.fillStyle = 'rgba(13,14,26,0.55)';
+    ctx.fillRect(0,0,W,H);
+    ctx.fillStyle = '#F1EEFB';
+    ctx.font = '16px "Space Grotesk", sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('Результат: ' + score + '  ·  🪙 ' + runCoins, W/2, H/2 - 6);
+    ctx.font = '12px "Space Grotesk", sans-serif';
+    ctx.fillStyle = '#8A8AA3';
+    ctx.fillText('нажми Space или кликни, чтобы начать заново', W/2, H/2 + 18);
+  }
+
+  window.startSnake = function(){
+    resetState();
+    running = true;
+    statusEl.textContent = 'в игре · ' + LEVELS[currentLevel].label;
+    levelSelect.classList.add('locked');
+    canvas.focus();
+    timer = setTimeout(loop, delay);
+  };
+
+  canvas.addEventListener('click', () => { if(activeGame === 'snake' && !running) startSnake(); });
+
+  window.snakeKeyDown = function(e){
+    if(e.key === 'ArrowLeft'  && dir.x !== 1)  nextDir = {x:-1,y:0};
+    if(e.key === 'ArrowRight' && dir.x !== -1) nextDir = {x:1, y:0};
+    if(e.key === 'ArrowUp'    && dir.y !== 1)  nextDir = {x:0, y:-1};
+    if(e.key === 'ArrowDown'  && dir.y !== -1) nextDir = {x:0, y:1};
+  };
+
+  // свайпы для тача
+  let touchStart = null;
+  canvas.addEventListener('touchstart', e => { touchStart = e.touches[0]; }, {passive:true});
+  canvas.addEventListener('touchend', e => {
+    if(activeGame !== 'snake' || !touchStart) return;
+    const t = e.changedTouches[0];
+    const dx = t.clientX - touchStart.clientX;
+    const dy = t.clientY - touchStart.clientY;
+    if(Math.abs(dx) > Math.abs(dy)){
+      if(dx > 20 && dir.x !== -1) nextDir = {x:1,y:0};
+      else if(dx < -20 && dir.x !== 1) nextDir = {x:-1,y:0};
+    } else {
+      if(dy > 20 && dir.y !== -1) nextDir = {x:0,y:1};
+      else if(dy < -20 && dir.y !== 1) nextDir = {x:0,y:-1};
+    }
+    touchStart = null;
+  });
+
+  resetState();
+  draw();
+})();
+
+/* =========================================================
+   ОБЩИЙ ОБРАБОТЧИК КЛАВИАТУРЫ (маршрутизация по активной игре)
+   ========================================================= */
+document.addEventListener('keydown', e => {
+  if(['ArrowLeft','ArrowRight','ArrowUp','ArrowDown',' '].includes(e.key)) e.preventDefault();
+  if(e.key === ' '){ startActiveGame(); return; }
+  if(activeGame === 'dash') window.dashKeyDown(e);
+  else window.snakeKeyDown(e);
+});
+document.addEventListener('keyup', e => {
+  if(activeGame === 'dash') window.dashKeyUp(e);
+});
 </script>
 
 </body>
