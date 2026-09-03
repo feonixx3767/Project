@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NEON DASH — тестовый игровой сайт</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #0D0E1A;
+    --bg-panel: #14172B;
+    --violet: #7C3AED;
+    --cyan: #22D3EE;
+    --pink: #F43F97;
+    --ink: #F1EEFB;
+    --muted: #8A8AA3;
+    --line: rgba(241,238,251,0.09);
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  html,body{
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Space Grotesk', sans-serif;
+    overflow-x: hidden;
+  }
+
+  body{
+    background-image:
+      radial-gradient(circle at 15% 10%, rgba(124,58,237,0.18), transparent 40%),
+      radial-gradient(circle at 85% 0%, rgba(34,211,238,0.12), transparent 45%),
+      repeating-linear-gradient(0deg, rgba(255,255,255,0.015) 0px, rgba(255,255,255,0.015) 1px, transparent 1px, transparent 3px);
+  }
+
+  .pixel{ font-family: 'Press Start 2P', monospace; }
+
+  a { color: inherit; text-decoration: none; }
+
+  /* ---------- NAV ---------- */
+  nav{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding: 28px 6vw;
+    border-bottom: 1px solid var(--line);
+  }
+  nav .logo{
+    font-size: 13px;
+    letter-spacing: 1px;
+  }
+  nav .logo span{ color: var(--cyan); }
+  nav ul{
+    list-style:none;
+    display:flex;
+    gap: 32px;
+    font-size: 14px;
+    color: var(--muted);
+  }
+  nav ul a:hover{ color: var(--ink); }
+  nav .cta{
+    border: 1px solid var(--violet);
+    padding: 9px 18px;
+    border-radius: 3px;
+    font-size: 13px;
+    background: rgba(124,58,237,0.12);
+  }
+  nav .cta:hover{ background: var(--violet); }
+
+  /* ---------- HERO / GAME ---------- */
+  .hero{
+    padding: 6vw 6vw 4vw;
+    display:grid;
+    grid-template-columns: 1.05fr 1fr;
+    gap: 4vw;
+    align-items:center;
+  }
+
+  .hero h1{
+    font-size: clamp(28px, 4vw, 48px);
+    line-height: 1.35;
+    margin-bottom: 22px;
+    animation: introGlow 1.4s ease-out;
+  }
+  @keyframes introGlow{
+    from{ text-shadow: 0 0 26px rgba(124,58,237,0.9); opacity:0; transform: translateY(8px);}
+    to{ text-shadow: 0 0 0 rgba(124,58,237,0); opacity:1; transform: translateY(0);}
+  }
+  .hero h1 em{
+    font-style:normal;
+    color: var(--cyan);
+  }
+
+  .hero p.lead{
+    color: var(--muted);
+    font-size: 16px;
+    max-width: 46ch;
+    margin-bottom: 30px;
+  }
+
+  .hero-actions{ display:flex; gap: 14px; flex-wrap: wrap; }
+  .btn{
+    display:inline-block;
+    padding: 13px 22px;
+    border-radius: 3px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor:pointer;
+    border: none;
+  }
+  .btn-primary{ background: var(--cyan); color: #05121A; }
+  .btn-primary:hover{ background: #63e4fa; }
+  .btn-ghost{ border: 1px solid var(--line); color: var(--ink); background: transparent; }
+  .btn-ghost:hover{ border-color: var(--muted); }
+
+  /* game panel */
+  .game-wrap{
+    background: var(--bg-panel);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 18px;
+    position: relative;
+  }
+  .game-hud{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom: 12px;
+    font-size: 12px;
+    color: var(--muted);
+  }
+  .game-hud .score{ color: var(--ink); }
+  .game-hud .score b{ color: var(--pink); font-size: 15px; }
+
+  #game{
+    width: 100%;
+    aspect-ratio: 4/3;
+    display:block;
+    background:
+      linear-gradient(180deg, rgba(124,58,237,0.10), rgba(34,211,238,0.05)),
+      #0A0B16;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  .game-hint{
+    margin-top: 12px;
+    font-size: 12px;
+    color: var(--muted);
+    text-align:center;
+  }
+  .game-hint kbd{
+    border: 1px solid var(--line);
+    border-radius: 3px;
+    padding: 1px 6px;
+    font-family: inherit;
+  }
+
+  /* ---------- STRIP ---------- */
+  .strip{
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    padding: 16px 6vw;
+    display:flex;
+    gap: 48px;
+    overflow:hidden;
+    color: var(--muted);
+    font-size: 13px;
+  }
+  .strip span{ white-space:nowrap; }
+  .strip b{ color: var(--ink); }
+
+  /* ---------- FEATURES ---------- */
+  .features{
+    padding: 6vw;
+    display:grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    overflow:hidden;
+    margin: 0 6vw;
+    width: calc(100% - 12vw);
+  }
+  .feature{
+    background: var(--bg-panel);
+    padding: 34px 28px;
+  }
+  .feature .num{
+    font-size: 11px;
+    color: var(--pink);
+    margin-bottom: 14px;
+  }
+  .feature h3{ font-size: 18px; margin-bottom: 10px; }
+  .feature p{ color: var(--muted); font-size: 14px; line-height: 1.6; }
+
+  /* ---------- LEADERBOARD ---------- */
+  .board{
+    padding: 6vw;
+    max-width: 620px;
+  }
+  .board h2{ font-size: 22px; margin-bottom: 6px; }
+  .board p{ color: var(--muted); font-size: 14px; margin-bottom: 26px; }
+  .board table{ width:100%; border-collapse: collapse; font-size: 14px; }
+  .board th{
+    text-align:left;
+    color: var(--muted);
+    font-weight: 500;
+    padding: 10px 6px;
+    border-bottom: 1px solid var(--line);
+    font-size: 12px;
+  }
+  .board td{
+    padding: 12px 6px;
+    border-bottom: 1px solid var(--line);
+  }
+  .board tr:last-child td{ border-bottom:none; }
+  .board td.rank{ color: var(--cyan); width: 36px; }
+
+  /* ---------- FOOTER ---------- */
+  footer{
+    padding: 40px 6vw 50px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    color: var(--muted);
+    font-size: 13px;
+    border-top: 1px solid var(--line);
+    margin-top: 40px;
+  }
+
+  @media (max-width: 860px){
+    .hero{ grid-template-columns: 1fr; }
+    .features{ grid-template-columns: 1fr; margin: 0 4vw; width: calc(100% - 8vw); }
+    nav ul{ display:none; }
+    footer{ flex-direction:column; gap:10px; text-align:center; }
+  }
+
+  :focus-visible{ outline: 2px solid var(--cyan); outline-offset: 2px; }
+
+  @media (prefers-reduced-motion: reduce){
+    .hero h1{ animation:none; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo pixel"><span>◆</span> NEON DASH</div>
+  <ul>
+    <li><a href="#play">Игра</a></li>
+    <li><a href="#features">Об игре</a></li>
+    <li><a href="#board">Рекорды</a></li>
+  </ul>
+  <a class="cta" href="#play">Играть</a>
+</nav>
+
+<section class="hero" id="play">
+  <div>
+    <h1>Уклоняйся от блоков.<br>Держи <em>ритм</em>. Побей рекорд.</h1>
+    <p class="lead">NEON DASH — мини-аркада прямо в браузере. Управляй кубом, уворачивайся от падающих преград, набирай очки. Никаких установок — просто открой и играй.</p>
+    <div class="hero-actions">
+      <button class="btn btn-primary" onclick="startGame()">Начать игру</button>
+      <a class="btn btn-ghost" href="#features">Как это работает</a>
+    </div>
+  </div>
+
+  <div class="game-wrap">
+    <div class="game-hud">
+      <span>СТАТУС: <span id="status">готов</span></span>
+      <span class="score">ОЧКИ: <b id="score">0</b></span>
+    </div>
+    <canvas id="game" width="480" height="360" tabindex="0"></canvas>
+    <p class="game-hint">Управление: <kbd>←</kbd> <kbd>→</kbd> или касание/мышь. <kbd>Space</kbd> — рестарт.</p>
+  </div>
+</section>
+
+<div class="strip">
+  <span><b>0</b> установок нужно</span>
+  <span><b>60 fps</b> на canvas</span>
+  <span><b>100%</b> открытый код — бери и меняй</span>
+  <span>Сделано как тестовый шаблон для GitHub Pages</span>
+</div>
+
+<section class="features" id="features">
+  <div class="feature">
+    <div class="num pixel">01</div>
+    <h3>Один файл</h3>
+    <p>Вся игра, стили и логика — в одном index.html. Загрузи в репозиторий и включи GitHub Pages, сайт готов.</p>
+  </div>
+  <div class="feature">
+    <div class="num pixel">02</div>
+    <h3>Растущая сложность</h3>
+    <p>Чем дольше держишься — тем быстрее падают блоки. Игра сама подстраивает темп под твой результат.</p>
+  </div>
+  <div class="feature">
+    <div class="num pixel">03</div>
+    <h3>Легко переделать</h3>
+    <p>Поменяй цвета в блоке :root, замени текст или логику игры в скрипте внизу файла — всё читаемо и без сборки.</p>
+  </div>
+</section>
+
+<section class="board" id="board">
+  <h2>Локальный рекорд</h2>
+  <p>Сохраняется в этом браузере, пока ты не сыграешь ещё раз.</p>
+  <table>
+    <tr><th>#</th><th>Результат</th><th>Статус</th></tr>
+    <tr><td class="rank">1</td><td id="bestScore">0</td><td>лучший в этой сессии</td></tr>
+    <tr><td class="rank">2</td><td id="lastScore">—</td><td>прошлая попытка</td></tr>
+  </table>
+</section>
+
+<footer>
+  <span>NEON DASH — тестовый шаблон</span>
+  <span>Собери свою версию и опубликуй на GitHub Pages</span>
+</footer>
+
+<script>
+  const canvas = document.getElementById('game');
+  const ctx = canvas.getContext('2d');
+  const scoreEl = document.getElementById('score');
+  const statusEl = document.getElementById('status');
+  const bestEl = document.getElementById('bestScore');
+  const lastEl = document.getElementById('lastScore');
+
+  const W = canvas.width, H = canvas.height;
+  let player, blocks, score, best, speed, running, keys, raf;
+
+  function resetState(){
+    player = { x: W/2 - 16, y: H - 34, w: 32, h: 18, speed: 6 };
+    blocks = [];
+    score = 0;
+    speed = 2.4;
+    running = false;
+    keys = { left:false, right:false };
+    scoreEl.textContent = '0';
+    statusEl.textContent = 'готов';
+  }
+  resetState();
+  best = 0;
+
+  function spawnBlock(){
+    const w = 26 + Math.random()*40;
+    blocks.push({ x: Math.random()*(W-w), y: -20, w, h: 18 });
+  }
+
+  let spawnTimer = 0;
+
+  function update(){
+    if(!running) return;
+
+    if(keys.left) player.x -= player.speed;
+    if(keys.right) player.x += player.speed;
+    player.x = Math.max(0, Math.min(W - player.w, player.x));
+
+    spawnTimer++;
+    const spawnRate = Math.max(18, 42 - Math.floor(score/5));
+    if(spawnTimer > spawnRate){ spawnBlock(); spawnTimer = 0; }
+
+    blocks.forEach(b => b.y += speed);
+    blocks = blocks.filter(b => b.y < H + 20);
+
+    for(const b of blocks){
+      if(player.x < b.x + b.w && player.x + player.w > b.x &&
+         player.y < b.y + b.h && player.y + player.h > b.y){
+        gameOver();
+        return;
+      }
+    }
+
+    score += 0.06;
+    speed += 0.0015;
+    scoreEl.textContent = Math.floor(score);
+
+    draw();
+    raf = requestAnimationFrame(update);
+  }
+
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+
+    // grid backdrop
+    ctx.strokeStyle = 'rgba(255,255,255,0.04)';
+    for(let x=0;x<W;x+=24){ ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,H); ctx.stroke(); }
+
+    // blocks
+    ctx.fillStyle = '#F43F97';
+    blocks.forEach(b => {
+      ctx.fillRect(b.x, b.y, b.w, b.h);
+    });
+
+    // player
+    ctx.fillStyle = '#22D3EE';
+    ctx.shadowColor = '#22D3EE';
+    ctx.shadowBlur = 14;
+    ctx.fillRect(player.x, player.y, player.w, player.h);
+    ctx.shadowBlur = 0;
+  }
+
+  function gameOver(){
+    running = false;
+    cancelAnimationFrame(raf);
+    statusEl.textContent = 'проигрыш — space чтобы заново';
+    const finalScore = Math.floor(score);
+    lastEl.textContent = finalScore;
+    if(finalScore > best){
+      best = finalScore;
+      bestEl.textContent = best;
+    }
+    draw();
+    ctx.fillStyle = 'rgba(13,14,26,0.55)';
+    ctx.fillRect(0,0,W,H);
+    ctx.fillStyle = '#F1EEFB';
+    ctx.font = '16px "Space Grotesk", sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('Результат: ' + finalScore, W/2, H/2 - 6);
+    ctx.font = '12px "Space Grotesk", sans-serif';
+    ctx.fillStyle = '#8A8AA3';
+    ctx.fillText('нажми Space или кликни, чтобы начать заново', W/2, H/2 + 18);
+  }
+
+  function startGame(){
+    resetState();
+    running = true;
+    statusEl.textContent = 'в игре';
+    canvas.focus();
+    raf = requestAnimationFrame(update);
+  }
+
+  document.addEventListener('keydown', e => {
+    if(e.key === 'ArrowLeft') keys.left = true;
+    if(e.key === 'ArrowRight') keys.right = true;
+    if(e.key === ' '){ e.preventDefault(); startGame(); }
+  });
+  document.addEventListener('keyup', e => {
+    if(e.key === 'ArrowLeft') keys.left = false;
+    if(e.key === 'ArrowRight') keys.right = false;
+  });
+
+  canvas.addEventListener('click', () => { if(!running) startGame(); });
+
+  canvas.addEventListener('mousemove', e => {
+    if(!running) return;
+    const rect = canvas.getBoundingClientRect();
+    const scale = W / rect.width;
+    const x = (e.clientX - rect.left) * scale;
+    player.x = Math.max(0, Math.min(W - player.w, x - player.w/2));
+  });
+
+  canvas.addEventListener('touchmove', e => {
+    if(!running) return;
+    e.preventDefault();
+    const rect = canvas.getBoundingClientRect();
+    const scale = W / rect.width;
+    const x = (e.touches[0].clientX - rect.left) * scale;
+    player.x = Math.max(0, Math.min(W - player.w, x - player.w/2));
+  }, { passive:false });
+
+  draw();
+</script>
+
+</body>
+</html>
